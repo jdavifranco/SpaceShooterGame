@@ -9,8 +9,13 @@ void main() {
   Flame.device.fullScreen();
 
   runApp(
-    GameWidget(
-      game: SpaceShooterGame(),
+    MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blueGrey,
+      ),
+      home: GameWidget(
+        game: SpaceShooterGame(),
+      ),
     ),
   );
 }
