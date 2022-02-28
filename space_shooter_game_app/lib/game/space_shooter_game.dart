@@ -4,38 +4,49 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/sprite.dart';
+import 'package:space_shooter_game_app/game/Enemy.dart';
+import 'package:space_shooter_game_app/game/EnemyManager.dart';
 import 'package:space_shooter_game_app/game/knows_game_size.dart';
 import 'package:space_shooter_game_app/game/player.dart';
 
-const space_sprite_sheet = 'ship_L.png';
+const space_sprite_sheet = 'simpleSpace_tilesheet.png';
 
 class SpaceShooterGame extends FlameGame with PanDetector {
+  late SpriteSheet spriteSheet;
   late Player player;
+  late Enemy enemy;
+
   Offset? _pointerStartPosition;
   Offset? _pointerCurrentPosition;
 
   final double _joystickRadius = 60;
   final double _deadZoneRadius = 10;
 
+  //Runs once before entering game loop
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     await images.load(space_sprite_sheet);
 
+    final spriteSheet = SpriteSheet(
+      image: images.fromCache(space_sprite_sheet),
+      srcSize: Vector2.all(64),
+    );
     player = Player(
-      Sprite(
-        images.fromCache(space_sprite_sheet),
-      ),
+      spriteSheet.getSpriteById(6),
       size / 2,
       Vector2(64, 64),
       Anchor.center,
     );
+
     await add(player);
+
+    final enemyManager = EnemyManager(spriteSheet: spriteSheet);
+    await add(enemyManager);
   }
 
   @override
   void render(Canvas canvas) {
-    // TODO: implement render
     super.render(canvas);
     if (_pointerStartPosition != null) {
       canvas.drawCircle(
@@ -107,7 +118,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   void prepareComponent(Component c) {
     // TODO: implement prepareComponent
     super.prepareComponent(c);
-    if(c is KnowsGameSize){
+    if (c is KnowsGameSize) {
       c.onResize(this.size);
     }
   }
