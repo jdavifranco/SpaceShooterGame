@@ -15,7 +15,7 @@ class Player extends SpriteComponent with KnowsGameSize{
     anchor: anchor,
   );
   Vector2 moveDirection = Vector2.zero();
-  final _speed = 500.0;
+  final _speed = 300.0;
 
   @override
   void update(double dt) {
